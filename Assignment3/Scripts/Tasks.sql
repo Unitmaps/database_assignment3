@@ -72,3 +72,32 @@ create or replace trigger trg_logging
 after insert on orders
 for each row
 execute function add_to_log();
+
+
+
+-- TESTING AREA
+
+
+-- Creating customer:
+
+insert into customers (full_name, email, balance) values ('Andrew Jons', 'jons@example.com', 499.99);
+
+
+-- Creating product:
+
+insert into products (product_name, price, stock_quantity) values ('Speakers', 120, 200);
+
+
+-- Creating order:
+
+call create_order(5);
+
+
+-- Add products to order:
+
+call add_product_to_order(4, 6, 2);
+
+
+-- Order totals are updated automatically
+-- Product stock decreases correctly
+-- Order creation is logged in order_log.
