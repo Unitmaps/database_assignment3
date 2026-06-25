@@ -1,5 +1,5 @@
 create or replace function calculate_order_total (p_order_id int)
-returns integer
+returns numeric(10, 2)
 language sql
 
 as $$
@@ -47,16 +47,11 @@ return new;
 end;
 $$;
 
-create or replace trigger trg_ins_del_total_order
-after insert or delete on order_items
+create or replace trigger trg_u_total_order
+after insert or delete or update on order_items
 for each row
 execute function upd_total_order();
 
-create or replace trigger trg_u_total_order
-after update on order_items
-for each row
-when (new.price is distinct from old.price or new.quantity is distinct from old.quantity)
-execute function upd_total_order();
 
 create or replace function add_to_log()
 returns trigger
@@ -95,7 +90,7 @@ call create_order(5);
 
 -- Add products to order:
 
-call add_product_to_order(4, 6, 2);
+call add_product_to_order(4, 6, 4);
 
 
 -- Order totals are updated automatically
